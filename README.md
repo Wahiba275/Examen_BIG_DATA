@@ -21,16 +21,76 @@ pyspark --jars "/home/bouzyan/mysql-connector-java-8.0.13.jar"
 ![Nom de l'image](/captures/démarrer_pyspark.PNG)
 
 1. ***Afficher le nombre total de commandes passées par tous les clients***
+```python
+df1 = spark.read.format("jdbc")\
+    .option(" driver " , " com.mysql.jdbc.Driver " )
+    .option("url","jdbc:mysql://localhost:3306/DB_COMMERCE")\
+    .option("user " , " root " )\
+    .option("password " , " " )\
+    .option("query","SELECT COUNT(*) AS Nombre TotaleCommandes FROM COMMANDES")\
+    .load()
+df1.show()
+```
 
 ![Nom de l'image](/captures/df1.PNG)
 
 2. ***Afficher le client qui a dépensé le plus (en terme de montant)***
+```python
+df1 = spark.read.format("jdbc")\
+    .option(" driver " , " com.mysql.jdbc.Driver " )
+    .option("url","jdbc:mysql://localhost:3306/DB_COMMERCE")\
+    .option("user " , " root " )\
+    .option("password " , " " )\
+    .option("query",""" SELECT
+            c.ID_CLIENT,
+            c.NOM,
+            c.PRENOM,
+            c.EMAIL,
+            c.ADRESS,
+            SUM(co.MONTANT_TOTAL) AS MontantTotalDepense
+        FROM
+            CLIENTS c
+        JOIN
+            COMMANDES co ON c.ID_CLIENT = co.ID_CLIENT
+        GROUP BY
+            c.ID_CLIENT, c.NOM, c.PRENOM, c.EMAIL, c.ADRESS
+        ORDER BY
+            MontantTotalDepense DESC
+        LIMIT 1
+    """)\
+    .load()
+   df1.show()
+
+```
 
 ![Nom de l'image](/captures/df2.PNG)
 
 ![Nom de l'image](/captures/resDF1.PNG)
 
 3. ***Afficher la moyenne des dépenses par client***
+```python
+df1 = spark.read.format("jdbc")\
+    .option(" driver " , " com.mysql.jdbc.Driver " )
+    .option("url","jdbc:mysql://localhost:3306/DB_COMMERCE")\
+    .option("user " , " root " )\
+    .option("password " , " " )\
+    .option("query","""SELECT
+        c.ID_CLIENT,
+        c.NOM,
+        c.PRENOM,
+        c.EMAIL,
+        c.ADRESS,
+        AVG(co.MONTANT_TOTAL) AS MoyenneDepenses
+    FROM
+        CLIENTS c
+    JOIN
+        COMMANDES co ON c.ID_CLIENT = co.ID_CLIENT
+    GROUP BY
+        c.ID_CLIENT, c.NOM, c.PRENOM, c.EMAIL, c.ADRESS
+""")\
+    .load()
+df1.show()
+```
 
 ![Nom de l'image](/captures/df3.PNG)
 
