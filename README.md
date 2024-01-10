@@ -69,7 +69,7 @@ df1 = spark.read.format("jdbc")\
 
 3. ***Afficher la moyenne des dépenses par client***
 ```python
-df1 = spark.read.format("jdbc")\
+df3 = spark.read.format("jdbc")\
     .option(" driver " , " com.mysql.jdbc.Driver " )
     .option("url","jdbc:mysql://localhost:3306/DB_COMMERCE")\
     .option("user " , " root " )\
@@ -89,7 +89,7 @@ df1 = spark.read.format("jdbc")\
         c.ID_CLIENT, c.NOM, c.PRENOM, c.EMAIL, c.ADRESS
 """)\
     .load()
-df1.show()
+df3.show()
 ```
 
 ![Nom de l'image](/captures/df3.PNG)
